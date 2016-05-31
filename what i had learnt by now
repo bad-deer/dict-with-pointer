@@ -1,0 +1,59 @@
+dont know how to say thinds in c in english, so i write in chinese;
+
+之前不知道，也没注意到：
+struct dict{ char *key, char *content, struct dict *next};
+&p, p, *p 
+pp, *pp, **pp
+1，指针直接赋值，指向的类型要一样，都应该是指向struct dict的指针；//函数要更改实参的值，要通过指针才行
+2，文件操作，都是通过指针（地址）来完成的。
+3，strncpy 能动态分配所需空间； strncmp 能准确比对所需内容，降低外界干扰。
+4，除了语法上，编程之外的东西也要考虑，比如：数学逻辑，功能是否有缺陷，都是编程之外的功夫
+
+
+
+
+
+之前知道，但写的过程中没注意到：
+wrong: int main(argc, args[])   //  right: int main(int argc, char *args[])
+1，函数定义，括号内要有类型；
+2，多个字符串，用指针数组
+
+void dict_free(struct dict *p) // 释放要完全，一定要清楚自己设定了多少堆。
+{
+    struct dict *pd = p;
+    while(pd->next){
+        if(pd->key)
+            free(pd->key);
+        if(pd->content)
+            free(pd->content);
+
+    struct dict *tmp;
+        tmp = pd->next;
+        free(pd);
+        pd = tmp;
+    }
+}
+3，  之前定义过的所有堆，都有释放完全，并且不能漏过。
+4，申请堆之后，要初始化。
+5，字符串不能直接赋值：  （指针和地址的操作）  动态数组，在定义的时候，是指针的形式。 不能直接初始化。 可以用堆分配空间，也可以直接指向另一个数组
+    以下是转载： 
+    学了这么多年的C语言，突然发现连字符串赋值都出错，真的很伤心。
+
+    char a[10];
+    怎么给这个数组赋值呢？
+    1、定义的时候直接用字符串赋值
+    char a[10]="hello";
+    注意：不能先定义再给它赋值，如char a[10]; a[10]="hello";这样是错误的！
+    2、对数组中字符逐个赋值
+    char a[10]={'h','e','l','l','o'};
+    3、利用strcpy
+    char a[10]; strcpy(a, "hello");
+
+    易错情况：
+    1、char a[10]; a[10]="hello";//一个字符怎么能容纳一个字符串？况且a[10]也是不存在的！
+    2、char a[10]; a="hello";//这种情况容易出现，a虽然是指针，但是它已经指向在堆栈中分配的10个字符空间，现在这个情况a又指向数据区中的hello常量，这里的指针a出现混乱，不允许！
+
+    还有：不能使用关系运算符“＝＝”来比较两个字符串，只能用strcmp() 函数来处理。
+    
+6， 在建立链表时，操作完后，要循环到下一个节点。
+7， long 要通过 %ld打印
